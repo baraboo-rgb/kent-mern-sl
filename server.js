@@ -10,9 +10,6 @@ const app = express();
 // Bodyparser Middleware
 app.use(bodyParser.json());
 
-// Unsure where to put this...but this fixes the postman get sending a 404 error
-app.use("/api/items", items);
-
 // DB Config
 const db = require('./config/keys').mongoURI;
 
@@ -22,7 +19,7 @@ mongoose.connect(db)
     .catch(err => console.log(err));
 
 // Use Routes
-    app.use(bodyParser.json());
+app.use('/api/items', items);
 
 // Serve Static Assets if in production
 if(process.env.NODE_ENV === 'production') {
@@ -31,7 +28,7 @@ if(process.env.NODE_ENV === 'production') {
 
     app.get('*', (req, res) => {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-    })
+    });
 }
 
 const port = process.env.PORT || 5000;
